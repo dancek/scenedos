@@ -1,0 +1,31 @@
+#!/bin/sh
+
+PREFIX=/opt/scenedos
+AUTOEXEC=_scdauto.bat
+
+KVM_OPT="-enable-kvm"
+BIOS_OPTS="-L $PREFIX/bios"
+OTHER_OPTS=
+IMG_OPTS="-hda $PREFIX/scenedos.img"
+
+if [ -f "$AUTOEXEC" ]; then
+  rm $AUTOEXEC
+fi
+
+while [ $# -ne 0 ]; do
+  if [ "$1" = "--no-kvm" ]; then
+    KVM_OPT=""
+  elif [ "$1" = "--floppy" ]; then
+    IMG_OPTS="-fda $PREFIX/scenedos-tiny.img -boot a"
+  elif [ "$1" = "--ms" ]; then
+    IMG_OPTS="-fda $PREFIX/scenedos-ms-tiny.img -boot a"
+  elif [ -f "$1" ]; then
+    echo -e "@echo off\r" > $AUTOEXEC
+    echo -e "$1\r" | sed 's_/_\\_g' >> $AUTOEXEC
+  else
+    OTHER_OPTS="$OTHER_OPTS $1"
+  fi
+  shift
+done
+
+qemu-system-i386 $IMG_OPTS -drive format=raw,file=fat:rw:. -s $KVM_OPT $BIOS_OPTS $OTHER_OPTS

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+PREFIX=/opt/scenedos
+
+gdb -x $PREFIX/gdbinit
