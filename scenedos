@@ -1,6 +1,7 @@
 #!/bin/sh
+set -e
 
-PREFIX=/opt/scenedos
+PREFIX=$(cd -- "$(dirname "$0")"; pwd -P)
 AUTOEXEC=_scdauto.bat
 
 KVM_OPT="-enable-kvm"
