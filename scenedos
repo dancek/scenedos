@@ -21,8 +21,8 @@ while [ $# -ne 0 ]; do
   elif [ "$1" = "--ms" ]; then
     IMG_OPTS="-fda $PREFIX/scenedos-ms-tiny.img -boot a"
   elif [ -f "$1" ]; then
-    echo -e "@echo off\r" > $AUTOEXEC
-    echo -e "$1\r" | sed 's_/_\\_g' >> $AUTOEXEC
+    printf "@echo off\r\n" > $AUTOEXEC
+    printf "%s\r\n" "$1" | sed 's_/_\\_g' >> $AUTOEXEC
   else
     OTHER_OPTS="$OTHER_OPTS $1"
   fi
